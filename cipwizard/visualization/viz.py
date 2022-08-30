@@ -7,7 +7,7 @@ import altair as alt
 from psycopg2 import sql
 from pprint import pprint
 
-from twitter2sql.core.util import open_database, save_to_csv, to_list_of_dicts, to_pandas
+from cipwizard.core.util import open_database, save_to_csv, to_list_of_dicts, to_pandas
 
 
 def timeline_chart(database_name,

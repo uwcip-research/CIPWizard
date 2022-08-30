@@ -6,7 +6,7 @@ import datetime
 from psycopg2 import sql
 from collections import OrderedDict
 
-from twitter2sql.core.util import open_database, save_to_csv, to_list_of_dicts
+from cipwizard.core.util import open_database, save_to_csv, to_list_of_dicts
 
 
 def aggregate_by_time(database_name,

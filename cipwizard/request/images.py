@@ -31,9 +31,9 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from umap import UMAP
 from sklearn.preprocessing import StandardScaler
 
-from twitter2sql.core import json_util
-from twitter2sql.core import sql_statements
-from twitter2sql.core.util import open_database, save_to_csv, \
+from cipwizard.core import json_util
+from cipwizard.core import sql_statements
+from cipwizard.core.util import open_database, save_to_csv, \
     to_list_of_dicts, to_pandas, set_dict, int_dict, dict_dict, \
     list_dict
 

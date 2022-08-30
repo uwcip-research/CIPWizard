@@ -7,8 +7,8 @@ from psycopg2 import sql
 from pprint import pprint
 from collections import defaultdict
 
-from twitter2sql.core import sql_statements
-from twitter2sql.core.util import clean, c, get_last_modified, \
+from cipwizard.core import sql_statements
+from cipwizard.core.util import clean, c, get_last_modified, \
     within_time_bounds, open_database, close_database, \
     get_column_header_dict, to_list_of_dicts
 

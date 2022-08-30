@@ -1,0 +1,1 @@
+from cipwizard.core.upload import upload_twitter_2_sql

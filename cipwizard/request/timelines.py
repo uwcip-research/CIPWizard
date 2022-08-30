@@ -9,7 +9,7 @@ from datetime import datetime
 from pprint import pprint
 # from shutil import remove
 
-from twitter2sql.core.util import twitter_str_to_dt
+from cipwizard.core.util import twitter_str_to_dt
 
 
 def get_timelines(api, input_ids, output_directory, stop_condition=3200,

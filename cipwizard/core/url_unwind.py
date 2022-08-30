@@ -19,8 +19,8 @@ from functools import partial
 from pprint import pprint
 from urllib.parse import urlparse
 
-from twitter2sql.core import sql_statements
-from twitter2sql.core.util import clean, c, get_last_modified, \
+from cipwizard.core import sql_statements
+from cipwizard.core.util import clean, c, get_last_modified, \
     within_time_bounds, open_database, close_database, \
     get_column_header_dict
 

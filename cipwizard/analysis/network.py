@@ -47,7 +47,8 @@ def generate_network_gexf(database_name=None,
                 overwrite=False,
                 mutual_overwrite=True,
                 skip_mutual=False,
-                deprecated=False):
+                deprecated=False,
+                additional_tables=None):
 
     # Type of tweet requested.
     if connection_type not in ['retweet', 'quote', 'reply', 'mention', 'all', 'parler_post']:
@@ -70,7 +71,7 @@ def generate_network_gexf(database_name=None,
         # Check for connections dictionary.
         if type(dict_pkl_file) is not str:
             connections_dict = dict_pkl_file
-        elif os.path.exists(mutual_pkl_file) and link_type == 'mutual':
+        elif os.path.exists(mutual_pkl_file) and link_type == 'mutual' and not mutual_overwrite:
             connections_dict = None
         elif os.path.exists(dict_pkl_file):
             print('Loading input dict')
@@ -113,7 +114,7 @@ def generate_network_gexf(database_name=None,
                 save_pkl, dict_pkl_file, users_pkl_file,
                 table_name, connection_type, conditions,
                 attributes, label, itersize,
-                limit)
+                limit, additional_tables)
 
     if mode == 'networkx':
         if graph is None:
@@ -226,7 +227,7 @@ def load_connection_data(input_json_dir,
 
 def stream_domain_data(database_name,
                 db_config_file,
-                output_gefx_file,
+                output_gexf_file,
                 save_pkl=True,
                 dict_pkl_file=None,
                 users_pkl_file=None,
@@ -311,7 +312,7 @@ def stream_domain_data(database_name,
 
 def stream_connection_data(database_name,
                 db_config_file,
-                output_gefx_file,
+                output_gexf_file=None,
                 save_pkl=True,
                 dict_pkl_file=None,
                 users_pkl_file=None,
@@ -321,12 +322,13 @@ def stream_connection_data(database_name,
                 attributes=None,
                 label='screen_name',
                 itersize=1000,
-                limit=None):
+                limit=None,
+                additional_tables=None):
 
     output_columns = set()
     if attributes is not None:
         output_columns += attributes
-    output_columns.update(['user_id', 'user_screen_name'])
+    output_columns.update([f'{table_name}.user_id', f'{table_name}.user_screen_name'])
 
     tweet_type_condition = sql_statements.tweet_formats(connection_type)
     where_statement = sql_statements.format_conditions([tweet_type_condition] + conditions)
@@ -364,7 +366,12 @@ def stream_connection_data(database_name,
     else:
         limit_statement = sql.SQL(f'LIMIT {limit}')
 
-    select_columns = sql.SQL(', ').join([sql.Identifier(item) for item in output_columns])
+    if additional_tables is not None:
+        table_select = table_name + ',' + ','.join(additional_tables)
+    else:
+        table_select = table_name
+
+    select_columns = sql.SQL(', ').join([sql.SQL(item) for item in output_columns])
 
     database, cursor = open_database(database_name, db_config_file,
             named_cursor='network_connections_retrieval', itersize=itersize)
@@ -374,10 +381,11 @@ def stream_connection_data(database_name,
         FROM {table_name}
         {where_statement}
         {limit_statement}
-        """).format(table_name=sql.SQL(table_name),
+        """).format(table_name=sql.SQL(table_select),
                 select=select_columns, where_statement=where_statement,
                 limit_statement=limit_statement)
 
+    print(user_statement.as_string(cursor))
     cursor.execute(user_statement)
     
     connections_dict = defaultdict(int_dict)
@@ -391,11 +399,11 @@ def stream_connection_data(database_name,
             for item in result:
                 item = dict(item)
 
-                username_dict[item['user_id']]['screen_name'].add(item['user_screen_name'])
+                username_dict[item[f'user_id']]['screen_name'].add(item['user_screen_name'])
 
                 if connection_type in ['reply', 'quote', 'retweet', 'parler_post']:
 
-                    connections_dict[item['user_id']][item[connect_column]] += 1
+                    connections_dict[item[f'user_id']][item[connect_column]] += 1
                     username_dict[item[connect_column]]['screen_name'].add(item[connect_column_screen_name])
 
                 elif connection_type == 'all':
@@ -483,6 +491,7 @@ def process_dicts_pkl(input_dict, user_dict, connection_limit=20,
             pbar = tqdm(input_dict.items())
 
             for connecting_user, connecting_dict in pbar:
+
                 connected_users = [key for key, val in connecting_dict.items() if val >= mutual_limit and key in high_tweet_users]
                 pairs = combinations(connected_users, 2)
                 pbar.set_description("Mutual dict %s" % len(mutual_dict))
@@ -517,9 +526,10 @@ def label_nodes(graph, connecting_user, connected_user, user_dict, deprecated=Fa
         graph.add_node(connecting_user, label=next(iter(user_dict[connecting_user]['screen_name'])))
         graph.add_node(connected_user, label=next(iter(user_dict[connected_user]['screen_name'])))
     else:
-        print(connecting_user)
+        # print(connecting_user)
+        # print(connected_user)
+        # print()
         graph.add_node(connecting_user, label=next(iter(user_dict[connecting_user])))
-        print(connected_user)
         graph.add_node(connected_user, label=next(iter(user_dict[connected_user])))
 
     return
@@ -531,6 +541,7 @@ def create_mutual_dict(input_dict, mutual_limit, normalize=False, min_connects=N
     pbar = tqdm(input_dict.items())
 
     for connecting_user, connecting_dict in pbar:
+        # print(connecting_user, connecting_dict)
         if not normalize:
             connected_users = [key for key, val in connecting_dict.items() if val >= mutual_limit]
         else:

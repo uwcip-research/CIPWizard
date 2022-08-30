@@ -16,8 +16,8 @@ from collections import defaultdict
 from tqdm import tqdm
 from datetime import date, timedelta, datetime, timezone
 
-from twitter2sql.core import sql_statements
-from twitter2sql.core.util import clean, c, get_last_modified, \
+from cipwizard.core import sql_statements
+from cipwizard.core.util import clean, c, get_last_modified, \
     within_time_bounds, open_database, close_database, \
     get_column_header_dict, to_list_of_dicts, save_to_csv, \
     sql_type_dictionary
@@ -53,7 +53,7 @@ def export_reply_threads(database_name,
         seed_db_config_file = db_config_file
 
     """ The cursor is a curious concept in SQL. All queries need to run through the cursor
-    object, and you need to generate one with Python. I use a function in twitter2sql.core.util
+    object, and you need to generate one with Python. I use a function in cipwizard.core.util
     to do this easily. You need a unique cursor for each server/database combination.
     """
     seed_database, seed_cursor = open_database(seed_database_name, seed_db_config_file)

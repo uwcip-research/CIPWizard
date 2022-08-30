@@ -13,8 +13,8 @@ from psycopg2.extras import Json
 from pprint import pprint
 from tqdm import tqdm
 
-from twitter2sql.core import sql_statements
-from twitter2sql.core.util import clean, get_last_modified, \
+from cipwizard.core import sql_statements
+from cipwizard.core.util import clean, get_last_modified, \
     within_time_bounds, open_database, close_database, \
     get_column_header_dict
 

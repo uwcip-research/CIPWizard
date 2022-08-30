@@ -16,7 +16,7 @@ if sys.version_info[:2] < (3, 5):
     raise RuntimeError("Python version 3.5 or greater required.")
 
 setup(
-    name='twitter2sql',
+    name='cipwizard',
     version='0.1.1',
     description=DOCLINES[0],
     packages=find_packages(),
@@ -25,8 +25,8 @@ setup(
     },
     author='Andrew Beers',
     author_email='albeers@uw.edu',
-    url='https://github.com/AndrewBeers/Twitter2SQL',  # use the URL to the github repo
-    download_url='https://github.com/AndrewBeers/Twitter2SQL/0.1.1',
+    url='https://github.com/uwcip-research/CIPWizard',  # use the URL to the github repo
+    download_url='https://github.com/uwcip-research/CIPWizard/0.1.1',
     keywords=['twitter', 'sql'],
     install_requires=[],
     classifiers=[],
