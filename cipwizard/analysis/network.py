@@ -12,11 +12,11 @@ from collections import defaultdict
 from itertools import combinations
 from glob import glob
 
-from twitter2sql.core.util import open_database, save_to_csv, \
+from cipwizard.core.util import open_database, save_to_csv, \
     to_list_of_dicts, to_pandas, set_dict, int_dict, dict_dict, \
     twitter_str_to_dt
-from twitter2sql.core.json_util import load_json
-from twitter2sql.core import sql_statements
+from cipwizard.core.json_util import load_json
+from cipwizard.core import sql_statements
 
 
 def generate_network_gexf(database_name=None,

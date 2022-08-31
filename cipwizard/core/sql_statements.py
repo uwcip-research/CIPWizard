@@ -474,7 +474,7 @@ def tweet_formats(formats):
         return sql.SQL('in_reply_to_user_id IS NOT NULL')
 
     elif formats == 'quote':
-        return sql.SQL('quoted_status_user_id IS NOT NULL')
+        return sql.SQL('quoted_status_id IS NOT NULL')
 
     elif formats == 'retweet':
         return sql.SQL('retweeted_status_user_id IS NOT NULL')

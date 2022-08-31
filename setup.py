@@ -17,7 +17,7 @@ if sys.version_info[:2] < (3, 5):
 
 setup(
     name='cipwizard',
-    version='0.1.1',
+    version='0.1.2',
     description=DOCLINES[0],
     packages=find_packages(),
     entry_points={
@@ -26,7 +26,7 @@ setup(
     author='Andrew Beers',
     author_email='albeers@uw.edu',
     url='https://github.com/uwcip-research/CIPWizard',  # use the URL to the github repo
-    download_url='https://github.com/uwcip-research/CIPWizard/0.1.1',
+    download_url='https://github.com/uwcip-research/CIPWizard/0.1.3',
     keywords=['twitter', 'sql'],
     install_requires=[],
     classifiers=[],
